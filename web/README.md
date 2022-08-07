@@ -1,1 +1,1 @@
-# bmk-portfolio-web
+# sanity-gatsby-blog-web

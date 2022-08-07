@@ -6,7 +6,7 @@ export function cn(...args) {
 
 export function mapEdgesToNodes(data) {
   if (!data.edges) return [];
-  return data.edges.map(edge => edge.node);
+  return data.edges.map((edge) => edge.node);
 }
 
 export function filterOutDocsWithoutSlugs({ slug }) {
@@ -14,20 +14,36 @@ export function filterOutDocsWithoutSlugs({ slug }) {
 }
 
 export function filterOutDocsPublishedInTheFuture({ publishedAt }) {
-  return !isFuture(publishedAt);
+  return !isFuture(new Date(publishedAt));
 }
 
 export function getBlogUrl(publishedAt, slug) {
-  return `/blog/${format(publishedAt, "yyyy/MM")}/${slug.current || slug}/`;
+  return `/blog/${format(new Date(publishedAt), "yyyy/MM")}/${
+    slug.current || slug
+  }/`;
 }
 
-export function buildImageObj(source) {
+export function buildImageObj(source = { asset: {} }) {
   const imageObj = {
-    asset: { _ref: source.asset._ref || source.asset._id }
+    asset: { _ref: source.asset._ref || source.asset._id },
   };
 
   if (source.crop) imageObj.crop = source.crop;
   if (source.hotspot) imageObj.hotspot = source.hotspot;
 
   return imageObj;
+}
+
+export function toPlainText(blocks) {
+  if (!blocks) {
+    return "";
+  }
+  return blocks
+    .map((block) => {
+      if (block._type !== "block" || !block.children) {
+        return "";
+      }
+      return block.children.map((child) => child.text).join("");
+    })
+    .join("\n\n");
 }

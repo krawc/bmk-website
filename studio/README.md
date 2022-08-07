@@ -1,1 +1,1 @@
-# bmk-portfolio-studio
+# sanity-gatsby-blog-studio

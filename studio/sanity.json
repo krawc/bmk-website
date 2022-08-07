@@ -1,10 +1,10 @@
 {
   "root": true,
   "project": {
-    "name": "Blog with Gatsby"
+    "name": "Portfolio with Gatsby"
   },
   "api": {
-    "projectId": "u7et89zn",
+    "projectId": "2fiephba",
     "dataset": "production"
   },
   "plugins": [
@@ -16,7 +16,8 @@
     "@sanity/desk-tool",
     "dashboard-widget-structure-menu",
     "dashboard-widget-document-list",
-    "dashboard-widget-netlify"
+    "dashboard-widget-netlify",
+    "@sanity/studio-hints"
   ],
   "parts": [
     {
@@ -24,16 +25,16 @@
       "path": "./schemas/schema.js"
     },
     {
-      "implements": "part:@sanity/base/theme/variables/override-style",
-      "path": "./src/styles/variables.css"
-    },
-    {
       "name": "part:@sanity/desk-tool/structure",
-      "path": "./src/structure/deskStructure.js"
+      "path": "./deskStructure.js"
     },
     {
       "implements": "part:@sanity/dashboard/config",
-      "path": "./src/dashboardConfig.js"
+      "path": "./dashboardConfig.js"
+    },
+    {
+      "implements": "part:@sanity/default-layout/studio-hints-config",
+      "path": "./studioHintsConfig.js"
     }
   ]
 }

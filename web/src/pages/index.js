@@ -1,46 +1,24 @@
 import React from "react";
 import { graphql } from "gatsby";
 import {
-  filterOutDocsPublishedInTheFuture,
-  filterOutDocsWithoutSlugs,
   mapEdgesToNodes,
+  filterOutDocsWithoutSlugs,
+  filterOutDocsPublishedInTheFuture
 } from "../lib/helpers";
-import BlogPostPreviewList from "../components/blog-post-preview-list";
 import Container from "../components/container";
 import GraphQLErrorList from "../components/graphql-error-list";
+import ProjectPreviewGrid from "../components/project-preview-grid";
 import SEO from "../components/seo";
 import Layout from "../containers/layout";
 
 export const query = graphql`
-  fragment SanityImage on SanityMainImage {
-    crop {
-      _key
-      _type
-      top
-      bottom
-      left
-      right
-    }
-    hotspot {
-      _key
-      _type
-      x
-      y
-      height
-      width
-    }
-    asset {
-      _id
-    }
-  }
-
   query IndexPageQuery {
     site: sanitySiteSettings(_id: { regex: "/(drafts.|)siteSettings/" }) {
       title
       description
       keywords
     }
-    posts: allSanityPost(
+    projects: allSanitySampleProject(
       limit: 6
       sort: { fields: [publishedAt], order: DESC }
       filter: { slug: { current: { ne: null } }, publishedAt: { ne: null } }
@@ -48,9 +26,26 @@ export const query = graphql`
       edges {
         node {
           id
-          publishedAt
           mainImage {
-            ...SanityImage
+            crop {
+              _key
+              _type
+              top
+              bottom
+              left
+              right
+            }
+            hotspot {
+              _key
+              _type
+              x
+              y
+              height
+              width
+            }
+            asset {
+              _id
+            }
             alt
           }
           title
@@ -64,7 +59,7 @@ export const query = graphql`
   }
 `;
 
-const IndexPage = (props) => {
+const IndexPage = props => {
   const { data, errors } = props;
 
   if (errors) {
@@ -76,8 +71,8 @@ const IndexPage = (props) => {
   }
 
   const site = (data || {}).site;
-  const postNodes = (data || {}).posts
-    ? mapEdgesToNodes(data.posts)
+  const projectNodes = (data || {}).projects
+    ? mapEdgesToNodes(data.projects)
         .filter(filterOutDocsWithoutSlugs)
         .filter(filterOutDocsPublishedInTheFuture)
     : [];
@@ -90,17 +85,13 @@ const IndexPage = (props) => {
 
   return (
     <Layout>
-      <SEO
-        title={site.title}
-        description={site.description}
-        keywords={site.keywords}
-      />
+      <SEO title={site.title} description={site.description} keywords={site.keywords} />
       <Container>
         <h1 hidden>Welcome to {site.title}</h1>
-        {postNodes && (
-          <BlogPostPreviewList
-            title="Latest blog posts"
-            nodes={postNodes}
+        {projectNodes && (
+          <ProjectPreviewGrid
+            title="Latest projects"
+            nodes={projectNodes}
             browseMoreHref="/archive/"
           />
         )}

@@ -1,1 +1,1 @@
-# sanity-gatsby-blog-web
+# bognamk-sanity-web
